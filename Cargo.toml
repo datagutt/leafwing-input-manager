@@ -46,10 +46,20 @@ docs = ['winit/x11', 'winit/wayland']
 [dependencies]
 leafwing_input_manager_macros = { path = "macros", version = "0.17" }
 bevy = { version = "0.19", default-features = false, features = [
-  "serialize",
   "std",
   "bevy_log",
   "gamepad",
+] }
+# Only the types of these crates are serialized. Enabling their own `serialize` features instead
+# of `bevy/serialize` keeps serde code out of every other Bevy crate in the app.
+bevy_input = { version = "0.19", default-features = false, features = [
+  "serialize",
+] }
+bevy_math = { version = "0.19", default-features = false, features = [
+  "serialize",
+] }
+bevy_platform = { version = "0.19", default-features = false, features = [
+  "serialize",
 ] }
 # Needed for the `docs` feature. Must be kept in sync with Bevy's version
 winit = { version = "0.30", default-features = false, optional = true }

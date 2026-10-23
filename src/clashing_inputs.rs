@@ -213,6 +213,16 @@ impl<A: Actionlike> InputMap<A> {
     ) -> Vec<Clash<A>> {
         let mut clashes = Vec::default();
 
+        // A clash needs two pressed actions. Finding the possible clashes compares every pair of
+        // bindings, so it is skipped on the many frames that press one action or none.
+        let pressed = updated_actions
+            .keys()
+            .filter(|action| updated_actions.pressed(action))
+            .count();
+        if pressed < 2 {
+            return clashes;
+        }
+
         // We can limit our search to the cached set of possibly clashing actions
         for clash in self.possible_clashes() {
             let pressed_a = updated_actions.pressed(&clash.action_a);
